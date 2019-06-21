@@ -69,7 +69,7 @@ fuzme_iteration = function(data_fuzzy, cluster_num, num_try) {
   data = data_fuzzy     # data frame to use with no missing data
   phi = 1.2     # fuzzy exponent value; 1 = hard clustering, > 1 increases fuzziness clustering
   maxiter = 1000     # max iterations per run
-  distype = 3     # distance metric; 1 = Euclidean, 2 = Diagonal, 3 = Mahalanobis
+  distype = 1     # distance metric; 1 = Euclidean, 2 = Diagonal, 3 = Mahalanobis
   toldif = 1     # fuzzy algorithm tolerance; closer to 0 = lower tolerance (takes longer)
   scatter = 0.5     # determing inital memberships to centroids; higher the number = more scatter
   ntry = num_try     # number of runs to optimize clustering data

@@ -1,7 +1,7 @@
 # location of scripts folder
-scripts_wd = "D:\\Yannik\\terron\\terron_workflow_code"
+scripts_wd = winDialogString("What is the path to the folder containing the scripts file?", "")
 setwd(scripts_wd)
-running = "main"
+running = "windows"
 
 ##### read in functions and libraries #####
 
@@ -32,28 +32,28 @@ if (clean_each == TRUE){
 
 # start process for each round
 for (i in round_num:rounds) {
-
+  
   # if first round, start here; if not, go to else statement at line 107
   if (round_num == 1) {
-
+    
     setwd(paste0(scripts_wd, "\\scripts"))
     # script for round 1
     source("round1.R")
-
+    
     if (clean_each == TRUE) {
       break
     }
-
+    
   } else {
-
+    
     setwd(paste0(scripts_wd, "\\scripts"))
     # script for other rounds
     source("otherrounds.R")
-
+    
     if (clean_each == TRUE) {
       break
     }
-
+    
   }
 }
 

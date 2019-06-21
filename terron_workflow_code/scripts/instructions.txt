@@ -4,17 +4,30 @@ The scripts use raster data so terron can be modeled by:
   terron = f(soil,climate,landscape,soil*climate*landscape)
 
 Scripts:
-main.R
+main.R or windows.R
 clustering_fun.R
 round1.R
 otherrounds.R
 inputs.R
 
-main.R
-  This script is the master script and only script that needs to be run.
-  The script will call the other four scripts as long as the scripts folder is assigned properly.
-    On the second line of this code, change the value for scripts_wd to the location of the scripts folder on your computer.
-  The second line of code is the only line that needs to be changed in this script.
+main.R or windows.R
+  These scripts are the master scripts and run all the other scripts from here.
+  One of these is the only script that needs to be run.
+  If running main.R:
+    The script will call the other four scripts as long as the scripts folder is assigned properly.
+      On the second line of this code, change the value for scripts_wd to the location of the scripts folder on your computer.
+      The second line of code is the only line that needs to be changed in this script.
+      Once the path to the scripts folder is set (second line of code) and the input variables are changed/saved,
+        run all of the code in this file.
+  If running windows.R:
+    Run all of the code in this file straight away.
+      There will be a prompt to set the path to the folder containing the scripts folder.
+      Once this is set properly, a window will pop-up for the input parameters.
+  The difference between the two is:
+    main.R - the second line needs to be set before running the code and the parameters in the inputs.R file need to be changed.
+              Option for users that want to see the inputs all at one time (more advanced option).
+    windows.R - only the code needs to be run without setting anything beforehand.
+              Option for users that want to set each parameter from a pop-up window and not look at the code (easier option).
 
 clustering_fun.R
   This script defines all of the user functions used throughout all the scripts and loads the libraries.
@@ -50,6 +63,9 @@ otherrounds.R
 
 inputs.R
   This script sets the inputs for the rest of the scripts.
+  Only open if planning on running from main.R.
+    If running from main.R:
+      Change each parameter as needed and save the file without running anything (only run main.R).
   The inputs are divided into two sections: basic requirements and more advanced settings.
   The basic requirements:
     rounds = the number of levels that should be created in the study area.
