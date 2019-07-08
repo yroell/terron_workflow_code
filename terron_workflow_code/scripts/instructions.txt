@@ -26,8 +26,10 @@ main.R or windows.R
   The difference between the two is:
     main.R - the second line needs to be set before running the code and the parameters in the inputs.R file need to be changed.
               Option for users that want to see the inputs all at one time (more advanced option).
+		*** run if using another operating system besides windows ***
     windows.R - only the code needs to be run without setting anything beforehand.
               Option for users that want to set each parameter from a pop-up window and not look at the code (easier option).
+		*** only works on a computer running windows ***
 
 clustering_fun.R
   This script defines all of the user functions used throughout all the scripts and loads the libraries.
