@@ -1,0 +1,108 @@
+These instructions are for understanding the 5 scripts that are associated with defining terrons. There is a flowchart of how the script works in the scripts folder.
+The idea behind all of these scripts is to create hierarchical terrons allowing for terrons at multiple scales depending on the study area.
+
+The scripts use raster data so terron can be modeled by:
+  terron = f(soil,climate,landscape,soil*climate*landscape)
+  
+I have created the code to be easy to implement. Pop-up windows will appear when each parameter needs to be set. This means the user does not need to look through the code, just run one script, answer the questions, and the analysis will start. The hardest part in using this workflow is knowing what data to cluster and how/where to get the data. The data preparation requires time and knowledge of the study area. Running the code should be the easy part.
+
+Please contact me if you have any questions or comments about the script (yannik.roell@gmail.com).
+
+
+Scripts:
+main.R or windows.R
+clustering_fun.R
+round1.R
+otherrounds.R
+inputs.R
+
+main.R or windows.R
+  These scripts are the master scripts and run all the other scripts from here.
+  One of these is the only script that needs to be run.
+  If running main.R:
+    The script will call the other four scripts as long as the scripts folder is assigned properly.
+      On the second line of this code, change the value for scripts_wd to the location of the scripts folder on your computer.
+      The second line of code is the only line that needs to be changed in this script.
+      Once the path to the scripts folder is set (second line of code) and the input variables are changed/saved,
+        run all of the code in this file.
+  If running windows.R:
+    Run all of the code in this file straight away.
+      There will be a prompt to set the path to the folder containing the scripts folder.
+      Once this is set properly, a window will pop-up for the input parameters.
+  The difference between the two is:
+    main.R - the second line needs to be set before running the code and the parameters in the inputs.R file need to be changed.
+              Option for users that want to see the inputs all at one time (more advanced option).
+		*** run if using another operating system besides windows ***
+    windows.R - only the code needs to be run without setting anything beforehand.
+              Option for users that want to set each parameter from a pop-up window and not look at the code (easier option).
+		*** only works on a computer running windows ***
+
+clustering_fun.R
+  This script defines all of the user functions used throughout all the scripts and loads the libraries.
+  The script will install packages not already on the machine and load the necessary libraries.
+  There are three functions defined in this script:
+    print_messages which is used to print messages to the screen and in the logfile that is created in the inputs.
+    optimal_cluster which determines the optimal number of clusters that should be run.
+      This function takes data and an upper limit of how many clusters to test.
+      The function is based on the code from http://www.mattpeeples.net/kmeans.html.
+      The idea is to create an elbow plot and find the maximum difference between the elbow plot and randomized data.
+      This maximum is returned as the optimal number of clusters.
+    fuzme_iteration which runs a fuzzy c-means clustering algorithm and optimizes the result.
+      This function takes data, a number of clusters that should be used, and a number of runs to optimize with.
+      The function is based on the code from https://bitbucket.org/brendo1001/fuzme/src.
+      The function returns a dataset that now includes the cluster with the highest membership value and the highest membership value.
+      This cluster and membership value is used to create two maps: one of cluster number and another of membership values.
+
+round1.R
+  This script will run if the round number is 1.
+  The idea is to read in a list of rasters from a folder and extract the values at a set of points.
+  This set of points is created from the first raster within the folder.
+  The first raster is changed into points and the rest of the rasters are extracted at the points.
+  These points are cleaned to remove any NAs and is now the dataset that will be used in the clustering algorithm.
+  The code determines what clustering method to use and how many clusters should be used from the user inputs.
+  Once this is done, a raster is created of the clusters (and membership if fuzzy c-means is used) and a csv is created will the raw raster values and cluster for each location.
+
+otherrounds.R
+  This script will run if the round number is not 1.
+  The idea and process is the same as the round1.R script but now the location is set from the output of the previous round.
+    This means (as an example) that if the first run created 3 clusters in the area and the number of clusters for the second run is set to 5,
+    there are three new outputs from the second run (the outputs would be a raster and csv for each cluster in the first round).
+    Each one of these new rasters from the second round, is now divided into five clusters for a total of 15 clusters in the second round.
+
+inputs.R
+  This script sets the inputs for the rest of the scripts.
+  Only open if planning on running from main.R.
+    If running from main.R:
+      Change each parameter as needed and save the file without running anything (only run main.R).
+  The inputs are divided into two sections: basic requirements and more advanced settings.
+  The basic requirements:
+    rounds = the number of levels that should be created in the study area.
+    variables = the location to a folder for each round that contains all of the rasters that the user is interested in clustering.
+    resolution = the resolution that each round should be set to.
+    cluster_num = the number of clusters used for each round, if elbow is set to TRUE.
+    fuzzy = the clustering algorithm that will be used (if set to TRUE, fuzzy c-mean will be used [slow]; if set to FALSE, k-means will be used [faster]). If the study area is large and high-resolution variables are used, either set fuzzy to false to run k-means or set fuzzy to true and opt to false to run a faster version of fuzzy c-means.
+c-means from the e1071 package should be used to reduce computation time.
+    output_folder = the location that the results will be put into, along with a logfile.
+  More advanced settings allow for more custom usage of the script but also slows down the code dramatically:
+    elbow = the setting to determine if the cluster number should be automatic or manually selected.
+      (if elbow = TRUE, the number of clusters is picked automatically from the optimal_cluster function in the clustering_fun.R script;
+      if elbow = FALSE, the number of clusters is picked manually from cluster_num).
+    max_clust = the maximum number of clusters to try when elbow is set to TRUE.
+    opt = the setting to determine if fuzzy c-means should be optimized or not.
+      (if opt = TRUE, the fuzzy c-mean function is coming from the fuzme library and uses the fuzme_iteration from the clustering_fun.R scipt to optimize the results [slow];
+      if opt = FALSE, the fuzzy c-means function is coming from the e1071 library and is only run once [not optimized, faster]).
+    opt_runs = the number of runs that should be iterated through when opt = TRUE.
+    seed = the number used to set the seed to help make results reproducible.
+
+    manual cleaning can be done on the data and can be done in two different ways: cleaning only after a certain run or clean after every run.
+      cleaning only once and after a certain run has three inputs:
+        manual_cleaning = the setting to determine if a run should be stopped to clean the data manually (remove salt and pepper affect from boundary between clusters).
+          (if manual_cleaning = TRUE, the script will stop at the number set for cleaning_round).
+        first_run = the setting to determine if the script has already be run before or not.
+          (if first_run = TRUE, the script knows to stop at the number set for cleaning_round;
+          if first_run = FALSE, the script knows to start one round later after the number set for cleaning_round and finishes the code to the last round).
+        cleaning_round = the round that the user wants to manually clean which means the script will stop after this number.
+      cleaning after each round has two inputs:
+        clean_each = the setting to determine if the code should stop after each round to let the user manually clean the data.
+        start_round = the round that the script should be started at.
+          (this value should be changed to increase by one each time so the code know where to start and the code will take data from the previous round if necessary).
