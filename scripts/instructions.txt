@@ -6,6 +6,9 @@ The scripts use raster data so terron can be modeled by:
   
 I have created the code to be easy to implement. Pop-up windows will appear when each parameter needs to be set. This means the user does not need to look through the code, just run one script, answer the questions, and the analysis will start. The hardest part in using this workflow is knowing what data to cluster and how/where to get the data. The data preparation requires time and knowledge of the study area. Running the code should be the easy part.
 
+Understanding when to use K-means vs Fuzzy c-means:
+Fuzzy c-means gives a lot more information but at each location, a value has to be generated for each cluster instead of just one like k-means. This slows down computation time drastically. A highest membership map is produced when using fuzzy c-means as well. If terrons are to be created to have a first glance at how physical regions are divided but nothing further, k-means can be used to speed up the process. If the study area is large and high-resolution variables are used, usually k-means will be a better option because fuzzy c-means requires a lot of time with big areas and lots of data.
+
 Please contact me if you have any questions or comments about the script (yannik.roell@gmail.com).
 
 
@@ -81,7 +84,6 @@ inputs.R
     resolution = the resolution that each round should be set to.
     cluster_num = the number of clusters used for each round, if elbow is set to TRUE.
     fuzzy = the clustering algorithm that will be used (if set to TRUE, fuzzy c-mean will be used [slow]; if set to FALSE, k-means will be used [faster]). If the study area is large and high-resolution variables are used, either set fuzzy to false to run k-means or set fuzzy to true and opt to false to run a faster version of fuzzy c-means.
-c-means from the e1071 package should be used to reduce computation time.
     output_folder = the location that the results will be put into, along with a logfile.
   More advanced settings allow for more custom usage of the script but also slows down the code dramatically:
     elbow = the setting to determine if the cluster number should be automatic or manually selected.
