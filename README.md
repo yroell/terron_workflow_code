@@ -1,8 +1,9 @@
 AUTHOR - Yannik E. Roell  
-MANUSCRIPT - Development of hierarchical terror workflow based on gridded data - A case study in Denmark  
+PUBLICATION - Development of hierarchical terror workflow based on gridded data - A case study in Denmark  
 JOURNAL - Computers and Geosciences  
 AFFILIATION - Department of Agroecology, Aarhus University, Tjele, Denmark   
-YEAR - 2019  
+YEAR - 2020
+DOI - https://doi.org/10.1016/j.cageo.2020.104454
 PROGRAMMING LANGUAGE - R  
 EMAIL - yannik.roell@gmail.com  
 
